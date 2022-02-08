@@ -21,7 +21,7 @@ namespace Assignment2_Spring22
             string paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.";
             string[] banned = { "hit" };
             string commonWord = MostCommonWord(paragraph, banned);
-            Console.WriteLine("Most frequent word is {0}:", commonWord);
+            Console.WriteLine("Most frequent word is : {0}", commonWord);
             Console.WriteLine();
 
         }
@@ -108,10 +108,102 @@ namespace Assignment2_Spring22
         {
             try
             {
+                string modifedParagraph = paragraph.ToLower();
+                if (paragraph.Contains('!'))
+                {
+                    modifedParagraph = modifedParagraph.Replace('!', ' ');
+                }
+                if (paragraph.Contains('?'))
+                {
+                    modifedParagraph = paragraph.Replace('?', ' ');
+                }
+                if (paragraph.Contains('\''))
+                {
+                    modifedParagraph = modifedParagraph.Replace('\'', ' ');
+                }
+                if (paragraph.Contains(','))
+                {
+                    modifedParagraph = modifedParagraph.Replace(',', ' ');
+                }
+                if (paragraph.Contains(';'))
+                {
+                    modifedParagraph = modifedParagraph.Replace(';', ' ');
+                }
+                if (paragraph.Contains('.'))
+                {
+                    modifedParagraph = modifedParagraph.Replace('.', ' ');
+                }
+                
+                string[] paraSplit = modifedParagraph.Split(" ");
+                int[] paraSplitCount = new int[paraSplit.Length];
+                int bannedLength = banned.Length;
 
-                //write your code here.
+                for(int i = 0; i < paraSplit.Length; i++)
+                {
+                    if (paraSplit[i].Equals(""))
+                    {
+                        paraSplitCount[i] = -1;
+                        continue;
+                    }
+                    paraSplitCount[i] = 1;
+                    for(int j=i+1; j<paraSplit.Length; j++)
+                    {
+                        if (paraSplit[j].Equals(""))
+                        {
+                            Debug.WriteLine("inside if of for loop: j = " + j);
+                            continue;
+                        }
+                        else if (paraSplit[i].Equals(paraSplit[j])){
+                            Debug.WriteLine("inside Else-if of for loop: paraSplit[i] = " + paraSplit[i]);
+                            paraSplit[j] = "";
+                            paraSplitCount[j] = -1;
+                            paraSplitCount[i] +=1;
+                            Debug.WriteLine("paraSplit[i] = _" + paraSplit[i]+"_");
+                            Debug.WriteLine("paraSplitCount[i] = " + paraSplitCount[i]);
+                        }
+                    }
+                }
 
-                return "";
+                for( int i = 0; i < paraSplit.Length; i++)
+                {
+                    Debug.WriteLine("paraSplit[i] = _" + paraSplit[i] + "_");
+                    Debug.WriteLine("paraSplitCount[i] = " + paraSplitCount[i]);
+                }
+                int maxCount = 0;
+                string maxSplit = "";
+                bool flag = false;//If string is in banned list
+
+
+                for (int i = 0; i < paraSplit.Length; i++)
+                {
+                    flag = false;
+                    Debug.WriteLine("inside maxCount for loop: i = " + i);
+                    if (paraSplitCount[i] > maxCount)
+                    {
+                        Debug.WriteLine("inside maxCount if condition: paraSplitCount[i] = " + paraSplitCount[i]);
+                        Debug.WriteLine("paraSplit[i] = " + paraSplit[i]);
+                        Debug.WriteLine("inside maxCount if condition: maxCount = " + maxCount);
+                        for (int z = 0; z < bannedLength; z++)
+                        {
+                            Debug.WriteLine("inside for loop - z = " + z);
+                            if (paraSplit[i].Equals(banned[z]))
+                            {
+                                Debug.WriteLine("inside for loop - if condition -  paraSplit[i] = " + paraSplit[i]);
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (!flag)
+                        {
+                            Debug.WriteLine("MaxCount is being assigned: maxCount = " + paraSplitCount[i]);
+                            Debug.WriteLine("MaxSplit = " + paraSplit[i]);
+                            maxCount = paraSplitCount[i];
+                            maxSplit = paraSplit[i];
+                        }
+                    }
+                }
+                
+                return maxSplit;
             }
             catch (Exception)
             {
