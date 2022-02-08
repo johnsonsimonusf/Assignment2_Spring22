@@ -24,6 +24,13 @@ namespace Assignment2_Spring22
             Console.WriteLine("Most frequent word is : {0}", commonWord);
             Console.WriteLine();
 
+            //Question 3:
+            Console.WriteLine("Question 3");
+            int[] arr1 = { 2, 2, 3, 4 };
+            int lucky_number = FindLucky(arr1);
+            Console.WriteLine("The Lucky number in the given array is {0}", lucky_number);
+            Console.WriteLine();
+
         }
 
         /*
@@ -210,6 +217,94 @@ namespace Assignment2_Spring22
 
                 throw;
             }
+        }
+
+        /*
+        Question 3:
+        Given an array of integers arr, a lucky integer is an integer that has a frequency in the array equal to its value.
+        Return the largest lucky integer in the array. If there is no lucky integer return -1.
+ 
+        Example 1:
+        Input: arr = [2,2,3,4]
+        Output: 2
+        Explanation: The only lucky number in the array is 2 because frequency[2] == 2.
+        Example 2:
+        Input: arr = [1,2,2,3,3,3]
+        Output: 3
+        Explanation: 1, 2 and 3 are all lucky numbers, return the largest of them.
+        Example 3:
+        Input: arr = [2,2,2,3,3]
+        Output: -1
+        Explanation: There are no lucky numbers in the array.
+         */
+
+        public static int FindLucky(int[] arr)
+        {
+            try
+            {
+                int current = 0;
+                int previous = 0;
+                int currentCount = 0;
+                int largestLuckyNum = -1;
+                int i = 0;
+
+                current = arr[0];
+                currentCount++;
+                if (arr.Length == 1)
+                {
+                    if (current == currentCount)
+                    {
+                        largestLuckyNum = 1;
+                        return largestLuckyNum;
+                    }
+                    else
+                    {
+                        return largestLuckyNum;
+                    }
+                }
+                
+                for (i = 1; i < arr.Length; i++)
+                {
+                    previous = current;
+                    current = arr[i];
+                    if(current == previous)
+                    {
+                        currentCount++;
+                    }
+                    else if (current != previous)
+                    {
+                        if(currentCount == previous)
+                        {
+                            if(largestLuckyNum < previous)
+                            {
+                                largestLuckyNum = previous;
+                            }
+                            
+                        }
+                        currentCount = 1;
+                        
+                    }
+                 }
+                if (i == arr.Length)
+                {
+                    previous = current;
+                    if (currentCount == previous)
+                    {
+                        if (largestLuckyNum < previous)
+                        {
+                            largestLuckyNum = previous;
+                        }
+                    }
+                 }
+                
+                return largestLuckyNum;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
     }
