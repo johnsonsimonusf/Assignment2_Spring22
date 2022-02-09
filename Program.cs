@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Assignment2_Spring22
@@ -30,6 +31,26 @@ namespace Assignment2_Spring22
             int lucky_number = FindLucky(arr1);
             Console.WriteLine("The Lucky number in the given array is {0}", lucky_number);
             Console.WriteLine();
+
+            //Question 4:
+            Console.WriteLine("Question 4");
+            string secret = "0451";
+            string guess = "0113";
+            string hint = GetHint(secret, guess);
+            Console.WriteLine("Hint for the guess is :{0}", hint);
+            Console.WriteLine();
+
+            //Question 5:
+            Console.WriteLine("Question 5");
+            string s = "ababcbacadefegdehijhklij";
+            List<int> part = PartitionLabels(s);
+            Console.WriteLine("Partation lengths are:");
+            for (int i = 0; i < part.Count; i++)
+            {
+                Console.Write(part[i] + "\t");
+            }
+            Console.WriteLine();
+
 
         }
 
@@ -306,6 +327,177 @@ namespace Assignment2_Spring22
             }
 
         }
+
+        /*
+        
+        Question 4:
+        You are playing the Bulls and Cows game with your friend.
+        You write down a secret number and ask your friend to guess what the number is. When your friend makes a guess, you provide a hint with the following info:
+        •	The number of "bulls", which are digits in the guess that are in the correct position.
+        •	The number of "cows", which are digits in the guess that are in your secret number but are located in the wrong position. Specifically, the non-bull digits in the guess that could be rearranged such that they become bulls.
+        Given the secret number secret and your friend's guess guess, return the hint for your friend's guess.
+        The hint should be formatted as "xAyB", where x is the number of bulls and y is the number of cows. Note that both secret and guess may contain duplicate digits.
+ 
+        Example 1:
+        Input: secret = "1807", guess = "7810"
+        Output: "1A3B"
+        Explanation: Bulls relate to a '|' and cows are underlined:
+        "1807"
+          |
+        "7810"
+        */
+
+        public static string GetHint(string secret, string guess)
+        {
+            try
+            {
+                string output = "";
+                List<int> secretList = new List<int> { };
+                List<int> guessList = new List<int> { };
+                int countBull = 0, countCow = 0, i = 0, j = 0;
+                for(i = 0; i<secret.Length; i++){
+                    if (secret[i] == guess[i])
+                    {
+                        countBull++;
+                        continue;
+                    }
+                    //converting characters with integers to Integers by subtracting ASCII value
+                    secretList.Add(secret[i]-48);
+                    guessList.Add(guess[i]-48);
+                }
+                secretList.Sort();
+                guessList.Sort();
+
+                for(i = 0, j = 0; i < secretList.Count && j < secretList.Count; )
+                {
+                    if (secretList[i] == guessList[j])
+                    {
+                        countCow++;
+                        i++;
+                        j++;
+                    }
+                    else if (secretList[i] < guessList[j])
+                    {
+                        i++;
+                    }
+                    else if (secretList[i] > guessList[j])
+                    {
+                        j++;
+                    }
+                }
+                output = countBull + "A" + countCow + "B";
+                return output;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /*
+        Question 5:
+        You are given a string s. We want to partition the string into as many parts as possible so that each letter appears in at most one part.
+        Return a list of integers representing the size of these parts.
+        Example 1:
+        Input: s = "ababcbacadefegdehijhklij"
+        Output: [9,7,8]
+        Explanation:
+        The partition is "ababcbaca", "defegde", "hijhklij".
+        This is a partition so that each letter appears in at most one part.
+        A partition like "ababcbacadefegde", "hijhklij" is incorrect, because it splits s into less parts.
+        */
+        public static List<int> PartitionLabels(string s)
+        {
+            try
+            {
+                char[] input = s.ToCharArray();
+                int inputLen = input.Length;
+                int min, max;
+                char[] uniqueElement = new char[inputLen];
+                int[,] uniqueRange = new int[inputLen, 2];
+                char c;
+                List<int> resultCountList = new List<int> { };
+
+                for(int i = 0; i < inputLen; i++)
+                {
+                    c = input[i];
+                    if (i == 0)
+                    {
+                        uniqueElement[i] = input[i];
+                        uniqueElement[i + 1] = '*';
+                        uniqueRange[i, 0] = 0;
+                        uniqueRange[i, 1] = 0;
+                        continue;
+                    }
+                    for(int j = 0; j < inputLen; j++)
+                    {
+                        if (uniqueElement[j] == '*') // Element not in uniqueElement array & we're at end
+                                                     // So, Add the new elemtent to array
+                        {
+                            uniqueElement[j] = input[i];
+                            uniqueElement[j + 1] = '*';
+                            uniqueRange[j, 0] = i;
+                            uniqueRange[j, 1] = i;
+                            break;
+                        }
+                        else if (uniqueElement[j] == input[i])
+                        {
+                            uniqueRange[j, 1] = i;
+                            break;
+                        }
+                    }
+                }
+                min = uniqueRange[0, 0];
+                max = uniqueRange[0, 1];
+                for (int z = 0; z < inputLen; z++)
+                {
+                    Debug.WriteLine($"unique element = {uniqueElement[z]} uniqueRange[z, 0] = {uniqueRange[z, 0]} uniqueRange[z, 1] = {uniqueRange[z, 1]}");
+                    if (uniqueElement[z] == '*')
+                    {
+                        break;
+                    }
+                }
+                for (int i = 0; i<inputLen; i++)
+                {
+                    if (uniqueElement[i] == '*')
+                    {
+                        resultCountList.Add(max - min + 1);
+                        Debug.WriteLine("Last character reveived");
+                        break;
+                    }
+                    if (max == min) // character with single occuarnce after string is found
+                    {
+                        Debug.WriteLine("Inside MIN = MAX = "+max);
+                        resultCountList.Add(max - min + 1);
+                        
+                    }
+                    else if(max > uniqueRange[i, 0] && max > uniqueRange[i,1])
+                    {
+                        continue;
+                    }
+                    else if (max > uniqueRange[i, 0] && max < uniqueRange[i, 1])
+                    {
+                        max = uniqueRange[i, 1];
+                    }
+                    else if (max < uniqueRange[i,0])//string is found
+                    {
+                        Debug.WriteLine("min = "+ min + " max = " + max);
+                        resultCountList.Add(max - min + 1);
+                        min = uniqueRange[i, 0];
+                        max = uniqueRange[i, 1];
+                        Debug.WriteLine("After adding string min = " + min + " max = " + max);    
+                    }
+                    Debug.WriteLine(uniqueElement[i] + " " + uniqueRange[i, 0] + " " + uniqueRange[i, 1]);
+                }
+                return resultCountList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
 
     }
 }
