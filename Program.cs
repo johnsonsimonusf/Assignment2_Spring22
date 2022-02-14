@@ -561,6 +561,10 @@ namespace Assignment2_Spring22
                         {
                             index--;
                         }
+                        else
+                        {
+                            return false;
+                        }
                     }
                     
                 }
