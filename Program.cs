@@ -11,7 +11,7 @@ namespace Assignment2_Spring22
         {
             //Question 1:
             Console.WriteLine("Question 1:");
-            int[] nums1 = { 1 };
+            int[] nums1 = { 0, 1, 2, 3, 12 };
             Console.WriteLine("Enter the target number:");
             int target = Int32.Parse(Console.ReadLine());
             int pos = SearchInsert(nums1, target);
@@ -23,23 +23,24 @@ namespace Assignment2_Spring22
             string paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.";
             string[] banned = { "hit" };
             string commonWord = MostCommonWord(paragraph, banned);
-            Console.WriteLine("Most frequent word is : {0}", commonWord);
+            Console.WriteLine("Most frequent word is {0}:", commonWord);
             Console.WriteLine();
 
             //Question 3:
             Console.WriteLine("Question 3");
-            int[] arr1 = { 4,3,2,2,4,1,3,4,3};
+            int[] arr1 = { 2, 2, 3, 4 };
             int lucky_number = FindLucky(arr1);
             Console.WriteLine("The Lucky number in the given array is {0}", lucky_number);
             Console.WriteLine();
 
             //Question 4:
             Console.WriteLine("Question 4");
-            string secret = "0451";
-            string guess = "0113";
+            string secret = "1807";
+            string guess = "7810";
             string hint = GetHint(secret, guess);
             Console.WriteLine("Hint for the guess is :{0}", hint);
             Console.WriteLine();
+
 
             //Question 5:
             Console.WriteLine("Question 5");
@@ -54,8 +55,8 @@ namespace Assignment2_Spring22
 
             //Question 6:
             Console.WriteLine("Question 6");
-            int[] widths = new int[] { 4, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-            string bulls_string9 = "bbbcccdddaaa";
+            int[] widths = new int[] { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+            string bulls_string9 = "abcdefghijklmnopqrstuvwxyz";
             List<int> lines = NumberOfLines(widths, bulls_string9);
             Console.WriteLine("Lines Required to print:");
             for (int i = 0; i < lines.Count; i++)
@@ -67,7 +68,7 @@ namespace Assignment2_Spring22
 
             //Question 7:
             Console.WriteLine("Question 7:");
-            string bulls_string10 = "[]{}()";
+            string bulls_string10 = "()[]{}";
             bool isvalid = IsValid(bulls_string10);
             if (isvalid)
                 Console.WriteLine("Valid String");
@@ -77,9 +78,10 @@ namespace Assignment2_Spring22
             Console.WriteLine();
             Console.WriteLine();
 
+
             //Question 8:
             Console.WriteLine("Question 8");
-            string[] bulls_string13 = { "a" };
+            string[] bulls_string13 = { "gin", "zen", "gig", "msg" };
             int diffwords = UniqueMorseRepresentations(bulls_string13);
             Console.WriteLine("Number of with unique code are: {0}", diffwords);
             Console.WriteLine();
@@ -534,20 +536,20 @@ namespace Assignment2_Spring22
                 //Using the principle of stack to run this program
                 int index = 0;
                 char[] string10 = new char[bulls_string10.Length];
-                foreach(char c in bulls_string10)
+                foreach(char c in bulls_string10) //Traversing through the input
                 {
-                    if (c == '(' || c == '[' || c == '{')
+                    if (c == '(' || c == '[' || c == '{') //If the input is an open bracket, add to the char array
                     {
                         string10[index] = c;
                         index++;
                     }
-                    else if (c == ')' || c == ']' || c == '}')
+                    else if (c == ')' || c == ']' || c == '}') //If the input is a closed bracket, remove elements from the char array
                     {
                         if(index == 0)
                         {
                             return false;
                         }
-                        if(string10[index-1] == '(' && c==')')
+                        if(string10[index-1] == '(' && c==')') //Making sure brackets match
                         {
                             index--;
                         }
@@ -562,7 +564,7 @@ namespace Assignment2_Spring22
                     }
                     
                 }
-                if (index == 0)
+                if (index == 0) //Return appropriate value based on the match
                 {
                     return true;
                 }
@@ -605,20 +607,20 @@ namespace Assignment2_Spring22
                 List<string> morseCode = new List<string> { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
                 List<string> outputCode = new List<string> { };
                 int inputLen = words.Length;
-                for(int i = 0; i< inputLen; i++)
+                for(int i = 0; i< inputLen; i++) //Going through the entire input strings
                 {
                     string s = words[i];
-                    string morseCharString = "";
-                    foreach(char c in s)
+                    string morseCharString = "";// code for each word
+                    foreach(char c in s) // formulating morese code for each word
                     {
                         morseCharString += morseCode[c - 97];
                     }
-                    outputCode.Add(morseCharString);
+                    outputCode.Add(morseCharString);//adding code to string list
                 }
-                IEnumerable<string> outputUniqueCode = outputCode.Distinct();
+                IEnumerable<string> outputUniqueCode = outputCode.Distinct(); //removing duplicates
 
 
-                return outputUniqueCode.Count<string>();
+                return outputUniqueCode.Count<string>(); //returning the count of the unique ones in list
             }
             catch (Exception)
             {
